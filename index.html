@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flutter Unit 1 & Unit 2 – Widgets, Layouts & Dart Basics Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0d0d0d;
+  --paper:#fafaf8;
+  --mid:#f2f2ef;
+  --rule:#e0e0d8;
+  --muted:#9a9a90;
+  --dim:#c4c4bc;
+  --pass:#1b5e38;
+  --pass-bg:#ebf5ef;
+  --fail:#7a1515;
+  --fail-bg:#fdf2f2;
+  --accent:#02569B;
+  --accent-bg:#e8f1fb;
+  --mono:'JetBrains Mono',monospace;
+  --body:'Sora',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);min-height:100vh}
+
+/* ── NAV ─────────────────────────────── */
+nav{
+  background:var(--ink);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 40px;height:48px;
+  position:sticky;top:0;z-index:200;
+}
+nav .logo{font-family:var(--mono);font-size:11px;color:#888;letter-spacing:.1em}
+nav .nav-r{display:flex;align-items:center;gap:20px;min-width:0}
+nav .timer{font-family:var(--mono);font-size:12px;color:#888;white-space:nowrap}
+nav .timer span{color:#ccc;font-weight:600}
+.nav-student{font-family:var(--mono);font-size:11px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.prog-bar{width:100%;height:3px;background:#1a1a1a;position:sticky;top:48px;z-index:199}
+.prog-inner{height:100%;background:linear-gradient(90deg,#13B9FD,#02569B);transition:width .4s ease;width:0}
+
+/* ── START SCREEN ─────────────────────── */
+#start-screen{max-width:760px;margin:0 auto;padding:72px 40px 80px}
+.eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+  color:var(--muted);text-transform:uppercase;margin-bottom:20px;
+}
+#start-screen h1{
+  font-size:clamp(36px,6vw,64px);font-weight:800;
+  line-height:1.05;letter-spacing:-.03em;margin-bottom:28px;
+}
+#start-screen h1 em{font-style:normal;color:var(--muted);font-weight:300}
+.start-desc{font-size:15px;color:#555;line-height:1.75;max-width:520px;margin-bottom:48px;font-weight:300}
+.info-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin-bottom:0;
+}
+.info-cell{background:var(--paper);padding:20px 18px}
+.info-cell .n{font-family:var(--mono);font-size:32px;font-weight:600;color:var(--ink);line-height:1}
+.info-cell .l{font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:.04em}
+
+/* topic legend */
+.topic-legend{
+  display:flex;flex-wrap:wrap;gap:8px;
+  padding:18px;
+  border:1px solid var(--rule);border-top:none;
+  background:var(--mid);
+  margin-bottom:40px;
+}
+.topic-tag{
+  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.04em;
+  padding:4px 12px;border-radius:20px;border:1.5px solid;
+}
+.tt-flutter{color:#02569B;background:#e8f1fb;border-color:#b3d1f5}
+.tt-dart{color:#0f766e;background:#f0fdfb;border-color:#99e6e0}
+.tt-widgets{color:#7c3aed;background:#f5f0ff;border-color:#d4b8ff}
+.tt-layout{color:#b45309;background:#fef9ee;border-color:#fcd34d}
+.tt-stateful{color:#b91c1c;background:#fff1f2;border-color:#fca5a5}
+
+.btn-start{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--ink);color:#fff;
+  font-family:var(--body);font-size:14px;font-weight:600;
+  padding:14px 32px;border:none;border-radius:2px;cursor:pointer;
+  transition:background .15s,transform .1s;letter-spacing:.01em;
+}
+.btn-start:hover{background:#222;transform:translateY(-1px)}
+.btn-start svg{transition:transform .15s}
+.btn-start:hover svg{transform:translateX(4px)}
+
+/* ── STUDENT REGISTRATION FORM ──────── */
+.student-form{margin-top:36px;margin-bottom:24px;border:1.5px solid var(--rule);border-radius:4px;overflow:hidden}
+.student-form-header{
+  background:var(--mid);border-bottom:1.5px solid var(--rule);
+  padding:14px 22px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;
+}
+.student-form-body{padding:24px 22px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.field-group{display:flex;flex-direction:column;gap:7px}
+.field-group label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.field-group input{
+  font-family:var(--body);font-size:14px;color:var(--ink);
+  background:var(--paper);border:1.5px solid var(--rule);border-radius:3px;
+  padding:11px 14px;outline:none;transition:border-color .15s,box-shadow .15s;width:100%;
+}
+.field-group input:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(13,13,13,.08)}
+.field-group input.input-error{border-color:var(--fail);box-shadow:0 0 0 3px rgba(122,21,21,.08)}
+.field-error{font-size:11px;color:var(--fail);font-family:var(--mono);display:none;margin-top:2px}
+.field-error.show{display:block}
+
+/* ── QUIZ SCREEN ──────────────────────── */
+#quiz-screen{display:none}
+.quiz-layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 51px)}
+
+/* sidebar */
+.sidebar{
+  border-right:1px solid var(--rule);padding:28px 20px;
+  position:sticky;top:51px;height:calc(100vh - 51px);
+  overflow-y:auto;background:var(--paper);
+}
+.sidebar-title{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:16px}
+.q-dots{display:flex;flex-wrap:wrap;gap:6px}
+.q-dot{
+  width:28px;height:28px;border-radius:2px;
+  border:1.5px solid var(--rule);
+  font-family:var(--mono);font-size:10px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);cursor:default;transition:all .2s;
+}
+.q-dot.active{border-color:var(--ink);background:var(--ink);color:#fff}
+.q-dot.done-ok{border-color:var(--pass);background:var(--pass-bg);color:var(--pass)}
+.q-dot.done-fail{border-color:var(--fail);background:var(--fail-bg);color:var(--fail)}
+.q-dot.done-answered{border-color:#02569B;background:#e8f1fb;color:#02569B}
+
+.sidebar-score{margin-top:28px;padding-top:24px;border-top:1px solid var(--rule)}
+.sidebar-score .sc-row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px}
+.sidebar-score .sc-row span{font-family:var(--mono);color:var(--ink);font-weight:600}
+
+/* topic legend in sidebar */
+.sidebar-legend{margin-top:24px;padding-top:20px;border-top:1px solid var(--rule)}
+.sidebar-legend .sidebar-title{margin-bottom:10px}
+.leg-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.leg-label{font-size:11px;color:var(--muted)}
+
+/* main content */
+.q-content{padding:48px 52px;max-width:720px}
+.q-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.q-num{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted)}
+.q-tag-pill{
+  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.05em;
+  padding:3px 10px;border-radius:20px;border:1.5px solid;
+}
+
+/* code block */
+.code-block{
+  font-family:var(--mono);font-size:12.5px;line-height:1.8;
+  background:#111;color:#cdd;border-radius:4px;
+  padding:20px 24px;margin:20px 0 28px;overflow-x:auto;white-space:pre;
+}
+.code-block .kw{color:#7ec8e3}
+.code-block .ann{color:#f0c96a}
+.code-block .str{color:#a8d8a8}
+.code-block .cmt{color:#4a6070;font-style:italic}
+.code-block .num{color:#f4a460}
+.code-block .type{color:#89d4cf}
+.code-block .iface{color:#d4a0f5}
+.code-block .widget{color:#f0c96a}
+.code-block .dart{color:#13B9FD}
+
+/* options */
+.options{display:flex;flex-direction:column;gap:9px;margin-bottom:28px}
+.opt{
+  display:grid;grid-template-columns:40px 1fr 24px;
+  align-items:center;gap:0;
+  border:1.5px solid var(--rule);border-radius:3px;
+  cursor:pointer;background:var(--paper);
+  transition:border-color .12s,background .12s,transform .1s;
+  overflow:hidden;
+}
+.opt:hover:not(.opt-locked){border-color:var(--ink);background:var(--mid);transform:translateX(4px)}
+.opt.opt-sel:not(.opt-locked){border-color:var(--ink);background:var(--mid)}
+.opt.opt-ok{border-color:var(--pass);background:var(--pass-bg)}
+.opt.opt-no{border-color:var(--fail);background:var(--fail-bg)}
+.opt.opt-locked{cursor:default}
+.opt-letter{
+  font-family:var(--mono);font-size:11px;font-weight:600;color:var(--muted);
+  height:100%;display:flex;align-items:center;justify-content:center;
+  transition:background .12s,color .12s;min-height:48px;
+}
+.opt.opt-ok  .opt-letter{background:var(--pass-bg);color:var(--pass);border-color:var(--pass)}
+.opt.opt-no  .opt-letter{background:var(--fail-bg);color:var(--fail);border-color:var(--fail)}
+.opt.opt-sel .opt-letter{background:var(--rule);color:var(--ink)}
+.opt-text{padding:12px 14px;font-size:14px;color:var(--ink);line-height:1.5}
+.opt-text code{font-family:var(--mono);background:var(--mid);padding:1px 6px;border-radius:2px;font-size:12px}
+.opt.opt-ok .opt-text code{background:#d4edd9}
+.opt.opt-no .opt-text code{background:#f9dede}
+.opt-icon{padding-right:14px;font-size:14px;opacity:0;transition:opacity .2s;text-align:center}
+.opt.opt-ok .opt-icon,.opt.opt-no .opt-icon{opacity:1}
+
+/* q-text */
+.q-text{font-size:21px;font-weight:700;line-height:1.3;letter-spacing:-.02em;color:var(--ink);margin-bottom:6px}
+.q-sub{font-size:14px;color:#666;font-weight:300;margin-bottom:24px;line-height:1.6}
+
+/* feedback */
+.feedback-box{display:none;border-radius:3px;padding:16px 20px;font-size:13.5px;line-height:1.65;margin-bottom:28px}
+.feedback-box.show{display:block;animation:pop .2s ease}
+.feedback-box.fb-ok{border-left:3px solid var(--pass);background:var(--pass-bg)}
+.feedback-box.fb-no{border-left:3px solid var(--fail);background:var(--fail-bg)}
+.fb-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;font-weight:600;text-transform:uppercase;margin-bottom:6px;display:block}
+.fb-ok .fb-label{color:var(--pass)}
+.fb-no .fb-label{color:var(--fail)}
+.fb-body{color:#333;font-weight:300}
+.fb-body code{font-family:var(--mono);background:rgba(0,0,0,.07);padding:1px 5px;border-radius:2px;font-size:12px}
+@keyframes pop{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
+
+/* action row */
+.act-row{display:flex;gap:12px;align-items:center}
+.btn-check{
+  font-family:var(--body);font-weight:600;font-size:13px;
+  background:var(--ink);color:#fff;border:none;
+  padding:11px 26px;border-radius:2px;cursor:pointer;
+  transition:background .12s;letter-spacing:.01em;
+}
+.btn-check:hover:not(:disabled){background:#333}
+.btn-check:disabled{background:var(--dim);cursor:not-allowed}
+.btn-next{
+  font-family:var(--body);font-weight:600;font-size:13px;
+  background:transparent;color:var(--muted);
+  border:1.5px solid var(--rule);
+  padding:11px 26px;border-radius:2px;cursor:pointer;
+  transition:all .12s;display:none;
+}
+.btn-next:hover{color:var(--ink);border-color:var(--ink)}
+.btn-prev{
+  font-family:var(--body);font-weight:600;font-size:13px;
+  background:transparent;color:var(--muted);
+  border:1.5px solid var(--rule);
+  padding:11px 22px;border-radius:2px;cursor:pointer;
+  transition:all .12s;
+}
+.btn-prev:hover{color:var(--ink);border-color:var(--ink)}
+.q-dot:hover:not(.active){border-color:var(--ink);color:var(--ink);transform:scale(1.1)}
+
+/* ── RESULTS SCREEN ───────────────────── */
+#results-screen{display:none;max-width:800px;margin:0 auto;padding:60px 40px 100px}
+.res-top{
+  border-bottom:1px solid var(--rule);padding-bottom:48px;margin-bottom:32px;
+  display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:center;
+}
+.res-score-big{font-family:var(--mono);font-size:96px;font-weight:600;line-height:1;letter-spacing:-.04em}
+.res-score-sub{font-size:15px;color:var(--muted);margin-top:10px;font-weight:300}
+.res-grade-card{border:2px solid var(--ink);border-radius:4px;padding:30px;text-align:center}
+.res-grade-letter{font-family:var(--mono);font-size:64px;font-weight:600;line-height:1;color:var(--ink)}
+.res-grade-name{font-size:13px;color:var(--muted);margin-top:8px}
+.grade-progress{margin-top:16px;height:3px;background:var(--rule);border-radius:2px;overflow:hidden}
+.grade-progress-fill{height:100%;background:var(--ink);transition:width 1.2s ease;width:0}
+
+.res-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin-bottom:40px;
+}
+.res-stat{background:var(--paper);padding:20px 16px}
+.res-stat .n{font-family:var(--mono);font-size:30px;font-weight:600;color:var(--ink);line-height:1}
+.res-stat .l{font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:.04em;text-transform:uppercase}
+
+/* topic breakdown bar */
+.topic-breakdown{margin-bottom:48px}
+.breakdown-title{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;padding-bottom:14px;border-bottom:1px solid var(--rule);margin-bottom:18px}
+.breakdown-row{display:grid;grid-template-columns:160px 1fr 48px;align-items:center;gap:14px;margin-bottom:12px}
+.breakdown-label{font-size:12px;color:var(--ink);font-family:var(--mono)}
+.breakdown-track{height:6px;background:var(--rule);border-radius:3px;overflow:hidden}
+.breakdown-fill{height:100%;background:var(--ink);border-radius:3px;transition:width 1s ease;width:0}
+.breakdown-pct{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right}
+
+.review-hdr{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;padding-bottom:14px;border-bottom:1px solid var(--rule);margin-bottom:4px}
+.rev-item{display:grid;grid-template-columns:44px 1fr;gap:0;border-bottom:1px solid var(--rule);padding:18px 0}
+.rev-n{font-family:var(--mono);font-size:11px;color:var(--dim);padding-top:2px}
+.rev-qtext{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.rev-ans-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.badge-ok{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.05em;color:var(--pass);background:var(--pass-bg);padding:2px 8px;border-radius:20px}
+.badge-no{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.05em;color:var(--fail);background:var(--fail-bg);padding:2px 8px;border-radius:20px}
+.rev-yours{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.rev-exp{font-size:12.5px;color:#555;margin-top:6px;font-weight:300;line-height:1.6}
+.rev-exp code{font-family:var(--mono);background:var(--mid);padding:0 4px;border-radius:2px;font-size:11px}
+.rev-exp-ok{background:var(--pass-bg);border-left:3px solid var(--pass);padding:7px 12px;border-radius:2px;color:var(--pass);font-weight:600;font-size:12px;margin-top:8px}
+.rev-exp-no{background:var(--fail-bg);border-left:3px solid var(--fail);padding:7px 12px;border-radius:2px;color:var(--fail);font-weight:600;font-size:12px;margin-top:8px}
+.rev-explanation{font-size:12.5px;color:#444;margin-top:8px;font-weight:300;line-height:1.65;padding:10px 14px;background:var(--mid);border-radius:3px}
+.rev-explanation code{font-family:var(--mono);background:#e4e4e0;padding:0 4px;border-radius:2px;font-size:11px}
+
+.res-buttons{margin-top:44px;display:flex;gap:12px;flex-wrap:wrap}
+.btn-retry{font-family:var(--body);font-weight:600;font-size:13px;background:var(--ink);color:#fff;border:none;padding:13px 30px;border-radius:2px;cursor:pointer;transition:background .12s}
+.btn-retry:hover{background:#333}
+.btn-print{font-family:var(--body);font-weight:600;font-size:13px;background:transparent;color:var(--muted);border:1.5px solid var(--rule);padding:13px 30px;border-radius:2px;cursor:pointer;transition:all .12s}
+.btn-print:hover{color:var(--ink);border-color:var(--ink)}
+
+/* ── SUBMIT BUTTON ────────────────────── */
+.btn-submit{
+  font-family:var(--body);font-weight:600;font-size:13px;
+  background:linear-gradient(135deg,#02569B,#0175C2);
+  color:#fff;border:none;padding:13px 30px;border-radius:2px;
+  cursor:pointer;transition:opacity .15s,transform .1s;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-submit:hover{opacity:.88;transform:translateY(-1px)}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-submit .spin{
+  width:14px;height:14px;border:2px solid rgba(255,255,255,.4);
+  border-top-color:#fff;border-radius:50%;
+  animation:spinner .6s linear infinite;display:none;
+}
+.btn-submit.loading .spin{display:block}
+.btn-submit.loading .btn-submit-lbl{opacity:.7}
+@keyframes spinner{to{transform:rotate(360deg)}}
+
+/* ── RETAKE BADGE on results stats ──── */
+.retake-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  background:#FFF3CD;color:#92400E;
+  border:1.5px solid #FCD34D;
+  padding:4px 12px;border-radius:20px;margin-top:8px;
+}
+
+/* ── SCREENSHOT CARD (what gets captured) ── */
+#screenshot-card{
+  background:#fff;border:1.5px solid var(--rule);
+  border-radius:6px;overflow:hidden;
+  margin-bottom:32px;
+}
+.sc-header{
+  background:linear-gradient(135deg,#02569B 0%,#0BA4A4 100%);
+  padding:20px 24px;display:flex;align-items:center;justify-content:space-between;
+}
+.sc-header-left{display:flex;align-items:center;gap:14px}
+.sc-logo-pill{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  color:#fff;background:rgba(255,255,255,.18);
+  padding:4px 12px;border-radius:20px;letter-spacing:.08em;
+}
+.sc-title{font-size:14px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.sc-subtitle{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px}
+.sc-stamp{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.6);text-align:right;line-height:1.6}
+.sc-body{padding:24px}
+.sc-student-row{
+  display:flex;align-items:center;gap:14px;
+  background:var(--mid);border:1px solid var(--rule);
+  border-radius:4px;padding:14px 18px;margin-bottom:20px;
+}
+.sc-avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--ink);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:14px;font-weight:600;flex-shrink:0;
+}
+.sc-student-name{font-size:15px;font-weight:700;color:var(--ink)}
+.sc-student-meta{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px}
+.sc-score-row{
+  display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin-bottom:20px;
+}
+.sc-stat{background:#fff;padding:16px 14px;text-align:center}
+.sc-stat .sn{font-family:var(--mono);font-size:26px;font-weight:600;color:var(--ink);line-height:1}
+.sc-stat .sl{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.04em}
+.sc-grade-row{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.sc-grade-pill{
+  font-family:var(--mono);font-size:48px;font-weight:600;
+  width:80px;height:80px;border-radius:4px;border:2px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.sc-grade-info{flex:1}
+.sc-grade-label{font-size:18px;font-weight:700;color:var(--ink)}
+.sc-grade-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.sc-grade-bar{height:4px;background:var(--rule);border-radius:2px;overflow:hidden;margin-top:10px}
+.sc-grade-bar-fill{height:100%;background:var(--ink);border-radius:2px;transition:width 1.2s ease;width:0}
+.sc-retake-row{
+  display:flex;align-items:center;gap:10px;
+  background:#FFF8E7;border:1.5px solid #FCD34D;
+  border-radius:4px;padding:10px 16px;margin-bottom:16px;
+}
+.sc-retake-icon{font-size:18px}
+.sc-retake-text{font-family:var(--mono);font-size:12px;color:#92400E;font-weight:600}
+.sc-breakdown{margin-bottom:4px}
+.sc-breakdown-title{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;padding-bottom:10px;border-bottom:1px solid var(--rule);margin-bottom:12px}
+.sc-bd-row{display:grid;grid-template-columns:150px 1fr 40px;align-items:center;gap:12px;margin-bottom:8px}
+.sc-bd-label{font-size:11px;color:var(--ink);font-family:var(--mono)}
+.sc-bd-track{height:5px;background:var(--rule);border-radius:3px;overflow:hidden}
+.sc-bd-fill{height:100%;background:#02569B;border-radius:3px;transition:width 1s ease;width:0}
+.sc-bd-pct{font-family:var(--mono);font-size:10px;color:var(--muted);text-align:right}
+.sc-footer{
+  background:var(--mid);border-top:1px solid var(--rule);
+  padding:12px 24px;display:flex;align-items:center;justify-content:space-between;
+}
+.sc-footer-lbl{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.06em}
+.sc-footer-tag{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  color:#02569B;background:#e8f1fb;border:1px solid #b3d1f5;
+  padding:3px 10px;border-radius:20px;
+}
+
+/* ── SUBMIT MODAL ─────────────────────── */
+#submit-modal{
+  display:none;position:fixed;inset:0;z-index:8000;
+  background:rgba(10,10,10,.75);
+  align-items:center;justify-content:center;padding:20px;
+}
+#submit-modal.show{display:flex}
+.modal-box{
+  background:#fff;border-radius:8px;max-width:460px;width:100%;
+  overflow:hidden;animation:pop .2s ease;
+}
+.modal-header{
+  background:linear-gradient(135deg,#02569B,#0BA4A4);
+  padding:20px 24px;
+}
+.modal-header h3{font-size:16px;font-weight:700;color:#fff;margin-bottom:4px}
+.modal-header p{font-size:12px;color:rgba(255,255,255,.7)}
+.modal-body{padding:24px}
+.modal-step{display:flex;gap:14px;margin-bottom:18px;align-items:flex-start}
+.modal-step-num{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--ink);color:#fff;
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+}
+.modal-step-text{font-size:13px;color:var(--ink);line-height:1.55}
+.modal-step-text strong{font-weight:700}
+.modal-step-text code{font-family:var(--mono);background:var(--mid);padding:1px 5px;border-radius:2px;font-size:11.5px}
+.modal-filename{
+  font-family:var(--mono);font-size:12px;
+  background:#F0FDF4;border:1.5px solid #86EFAC;color:#14532D;
+  padding:10px 14px;border-radius:4px;margin:16px 0 20px;
+  display:flex;align-items:center;gap:8px;
+}
+.modal-filename svg{flex-shrink:0}
+.modal-footer{padding:0 24px 20px;display:flex;gap:10px}
+.modal-btn-close{
+  flex:1;font-family:var(--body);font-weight:600;font-size:13px;
+  background:var(--ink);color:#fff;border:none;
+  padding:11px;border-radius:2px;cursor:pointer;transition:background .12s;
+}
+.modal-btn-close:hover{background:#333}
+.modal-btn-again{
+  font-family:var(--body);font-weight:600;font-size:13px;
+  background:transparent;color:var(--muted);
+  border:1.5px solid var(--rule);
+  padding:11px 20px;border-radius:2px;cursor:pointer;transition:all .12s;
+}
+.modal-btn-again:hover{color:var(--ink);border-color:var(--ink)}
+
+/* ── STUDENT BADGE ────────────────────── */
+.student-badge{display:flex;align-items:center;gap:14px;background:var(--mid);border:1px solid var(--rule);border-radius:4px;padding:16px 20px;margin-bottom:32px}
+.sb-avatar{width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:15px;font-weight:600;flex-shrink:0}
+.sb-name{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.sb-id{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:3px}
+.sb-date{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:2px}
+
+/* ── ANTI-CHEAT OVERLAY ───────────────── */
+#anticheat-overlay{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(10,10,10,.97);
+  flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:32px;
+}
+#anticheat-overlay.show{display:flex}
+.ac-icon{font-size:56px;margin-bottom:24px;animation:shake .4s ease}
+.ac-title{font-family:var(--mono);font-size:clamp(22px,5vw,36px);color:#fff;font-weight:600;letter-spacing:-.02em;margin-bottom:14px}
+.ac-msg{font-size:clamp(13px,3vw,15px);color:#888;max-width:480px;line-height:1.7;font-weight:300;margin-bottom:32px}
+.ac-score{font-family:var(--mono);font-size:clamp(48px,12vw,96px);font-weight:600;color:#c0392b;line-height:1;margin-bottom:8px}
+.ac-score-label{font-size:13px;color:#555;margin-bottom:36px}
+.ac-btn{font-family:var(--body);font-weight:600;font-size:14px;background:#fff;color:var(--ink);border:none;padding:14px 36px;border-radius:2px;cursor:pointer;transition:background .15s,transform .1s}
+.ac-btn:hover{background:#ddd;transform:translateY(-1px)}
+#cheat-warning{
+  display:none;position:fixed;top:51px;left:0;right:0;z-index:500;
+  background:#7a1515;color:#fff;padding:10px 20px;text-align:center;
+  font-family:var(--mono);font-size:12px;letter-spacing:.04em;animation:slideDown .3s ease;
+}
+#cheat-warning.show{display:block}
+@keyframes slideDown{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-8deg)}60%{transform:rotate(8deg)}}
+
+/* ── INCOGNITO / SPLIT-SCREEN BLOCK ──── */
+#incognito-block, #splitscreen-block{
+  display:none;position:fixed;inset:0;z-index:99999;
+  background:rgba(10,10,10,.98);
+  flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:40px;
+}
+#incognito-block.show, #splitscreen-block.show{display:flex}
+.block-icon{font-size:64px;margin-bottom:24px}
+.block-title{font-family:var(--mono);font-size:clamp(20px,4vw,32px);color:#fff;font-weight:600;margin-bottom:14px}
+.block-msg{font-size:14px;color:#888;max-width:500px;line-height:1.8;font-weight:300;margin-bottom:12px}
+.block-msg strong{color:#ccc}
+
+/* ── ATTEMPT BADGE ────────────────────── */
+#attempt-badge{
+  display:none;
+  font-family:var(--mono);font-size:12px;
+  background:linear-gradient(135deg,#1e3a5f,#02569B);
+  color:#e8f1fb;border:1.5px solid #4a90d9;
+  border-radius:6px;padding:14px 20px;
+  margin-bottom:24px;
+  align-items:center;gap:12px;
+}
+#attempt-badge.show{display:flex}
+.attempt-badge-icon{font-size:22px}
+.attempt-badge-text{line-height:1.6}
+.attempt-badge-text strong{color:#fff;font-size:13px}
+.attempt-badge-list{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
+.attempt-pill{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  padding:2px 10px;border-radius:20px;
+  background:rgba(255,255,255,.12);color:#cce0ff;border:1px solid rgba(255,255,255,.2);
+}
+@media(max-width:700px){
+  .quiz-layout{grid-template-columns:1fr}
+  .q-content{padding:20px 16px 40px}
+  #start-screen{padding:40px 18px 60px}
+  nav{padding:0 18px;height:44px}
+  .prog-bar{top:44px}
+  .sidebar{
+    position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule);
+    padding:12px 16px;display:flex;flex-direction:row;align-items:center;gap:12px;
+    overflow-x:auto;flex-wrap:wrap;
+  }
+  .sidebar-title{margin-bottom:0;white-space:nowrap;flex-shrink:0}
+  .q-dots{flex-wrap:nowrap;gap:4px;flex-shrink:0}
+  .q-dot{width:24px;height:24px;font-size:9px}
+  .sidebar-score{margin-top:0;padding-top:0;border-top:none;display:flex;gap:14px;margin-left:auto;flex-shrink:0}
+  .sidebar-score .sc-row{flex-direction:column;align-items:center;font-size:10px;margin-bottom:0}
+  .sidebar-score .sc-row span{font-size:13px}
+  .sidebar-legend{display:none}
+  .info-grid{grid-template-columns:repeat(2,1fr)}
+  .student-form-body{grid-template-columns:1fr}
+  .btn-start{width:100%;justify-content:center;padding:16px 24px}
+  .q-text{font-size:17px}
+  .code-block{font-size:11px;padding:14px 16px}
+  .opt{grid-template-columns:36px 1fr 22px}
+  .opt-letter{min-height:42px}
+  .opt-text{font-size:13px;padding:10px 10px}
+  .act-row{flex-direction:column;align-items:stretch}
+  .btn-check,.btn-next{width:100%;text-align:center;padding:14px}
+  .res-top{grid-template-columns:1fr}
+  .res-score-big{font-size:clamp(60px,18vw,96px)}
+  .res-grade-card{padding:20px}
+  .res-grade-letter{font-size:48px}
+  .res-stats{grid-template-columns:repeat(2,1fr)}
+  #results-screen{padding:40px 18px 80px}
+  .res-buttons{flex-direction:column}
+  .btn-retry,.btn-print{width:100%;text-align:center}
+  .breakdown-row{grid-template-columns:110px 1fr 40px}
+  .breakdown-label{font-size:10px}
+  .nav-student{max-width:120px;font-size:10px}
+  .ac-btn{width:100%}
+  .topic-legend{padding:14px}
+}
+@media(max-width:420px){
+  .q-dots{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+  .sidebar{flex-direction:column;align-items:flex-start}
+  .sidebar-score{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="logo">Flutter Unit 1 & Unit 2 · Knowledge Quiz</span>
+  <div class="nav-r">
+    <span class="nav-student" id="nav-student" style="display:none"></span>
+    <div class="timer" id="timer-display" style="display:none">⏱ <span id="timer-val">25:00</span> left</div>
+  </div>
+</nav>
+<div class="prog-bar"><div class="prog-inner" id="prog"></div></div>
+
+<!-- START SCREEN -->
+<div id="start-screen">
+  <p class="eyebrow">Knowledge Assessment · Mobile Application Development</p>
+  <h1>Flutter Unit 1 &amp; Unit 2<br><em>Widgets, Layouts &amp; Dart Basics</em></h1>
+  <p class="start-desc">
+    Test your understanding of Flutter fundamentals — from Dart language features and the widget model
+    to layouts, state, and core UI components. This quiz covers <strong>Unit 1 &amp; Unit 2</strong> material.
+    Each question reveals a detailed explanation after you answer, reinforcing concepts and highlighting common pitfalls.
+  </p>
+  <p style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:28px;text-transform:uppercase;">✦ Created by <strong style="color:var(--ink)">Abel Tadesse</strong></p>
+
+  <div class="info-grid">
+    <div class="info-cell"><div class="n">35</div><div class="l">Questions</div></div>
+    <div class="info-cell"><div class="n">5</div><div class="l">Topic areas</div></div>
+    <div class="info-cell"><div class="n">25</div><div class="l">Minutes</div></div>
+    <div class="info-cell"><div class="n">70%</div><div class="l">Pass mark</div></div>
+  </div>
+
+  <div class="topic-legend">
+    <span class="topic-tag tt-flutter">Flutter Basics</span>
+    <span class="topic-tag tt-dart">Dart Language</span>
+    <span class="topic-tag tt-widgets">Widget Fundamentals</span>
+    <span class="topic-tag tt-layout">Layouts &amp; UI</span>
+    <span class="topic-tag tt-stateful">State &amp; Lifecycle</span>
+  </div>
+
+  <!-- Attempt history badge -->
+  <div id="attempt-badge">
+    <span class="attempt-badge-icon">📋</span>
+    <div class="attempt-badge-text">
+      <strong>Previous Attempts on This Device</strong>
+      <div class="attempt-badge-list" id="attempt-badge-list"></div>
+    </div>
+  </div>
+
+  <!-- Student Registration -->
+  <div class="student-form">
+    <div class="student-form-header">Student Information — required before starting</div>
+    <div class="student-form-body">
+      <div class="field-group">
+        <label for="input-name">Full Name</label>
+        <input type="text" id="input-name" placeholder="e.g. Jane Smith" autocomplete="name" />
+        <span class="field-error" id="err-name">Please enter your full name.</span>
+      </div>
+      <div class="field-group">
+        <label for="input-id">Student ID</label>
+        <input type="text" id="input-id" placeholder="ATE/0000/00" autocomplete="off" maxlength="11" oninput="formatStudentId(this)" />
+        <span style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px;">Format: ATE/####/## (e.g. ATE/1234/56)</span>
+        <span class="field-error" id="err-id">Please enter your Student ID in the format ATE/####/##.</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-start" onclick="startQuiz()">
+    Begin Quiz
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quiz-screen">
+  <div class="quiz-layout">
+    <aside class="sidebar">
+      <p class="sidebar-title">Progress</p>
+      <div class="q-dots" id="dot-grid"></div>
+      <div class="sidebar-score">
+        <div class="sc-row">Answered <span id="sc-answered">0 / 35</span></div>
+        <div class="sc-row">Correct <span id="sc-correct">0</span></div>
+        <div class="sc-row">Score <span id="sc-pct">—</span></div>
+      </div>
+      <div class="sidebar-legend">
+        <p class="sidebar-title">Topics</p>
+        <div class="leg-row"><div class="leg-dot" style="background:#02569B"></div><span class="leg-label">Flutter Basics</span></div>
+        <div class="leg-row"><div class="leg-dot" style="background:#0f766e"></div><span class="leg-label">Dart Language</span></div>
+        <div class="leg-row"><div class="leg-dot" style="background:#7c3aed"></div><span class="leg-label">Widget Fundamentals</span></div>
+        <div class="leg-row"><div class="leg-dot" style="background:#b45309"></div><span class="leg-label">Layouts &amp; UI</span></div>
+        <div class="leg-row"><div class="leg-dot" style="background:#b91c1c"></div><span class="leg-label">State &amp; Lifecycle</span></div>
+      </div>
+    </aside>
+    <main class="q-content" id="q-mount"></main>
+  </div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div id="results-screen">
+  <p class="eyebrow">Quiz Complete</p>
+
+  <!-- ══ SCREENSHOT CARD — this entire div is captured ══ -->
+  <div id="screenshot-card">
+
+    <!-- Card header -->
+    <div class="sc-header">
+      <div class="sc-header-left">
+        <span class="sc-logo-pill">UNIT 1 & 2</span>
+        <div>
+          <div class="sc-title">Flutter · Unit 1 &amp; Unit 2 · Widgets, Layouts &amp; Dart Basics</div>
+          <div class="sc-subtitle">Mobile Application Development · Created by Abel Tadesse</div>
+        </div>
+      </div>
+      <div class="sc-stamp" id="sc-stamp-date">—</div>
+    </div>
+
+    <div class="sc-body">
+
+      <!-- Student row -->
+      <div class="sc-student-row">
+        <div class="sc-avatar" id="sc-avatar">?</div>
+        <div>
+          <div class="sc-student-name" id="sc-student-name">—</div>
+          <div class="sc-student-meta" id="sc-student-meta">—</div>
+        </div>
+      </div>
+
+      <!-- Retake notice -->
+      <div class="sc-retake-row" id="sc-retake-row">
+        <span class="sc-retake-icon">🔁</span>
+        <span class="sc-retake-text" id="sc-retake-text">Attempt #1 on this device</span>
+      </div>
+
+      <!-- Grade + score side by side -->
+      <div class="sc-grade-row">
+        <div class="sc-grade-pill" id="sc-grade-pill">—</div>
+        <div class="sc-grade-info">
+          <div class="sc-grade-label" id="sc-grade-label">—</div>
+          <div class="sc-grade-sub"  id="sc-grade-sub">—</div>
+          <div class="sc-grade-bar"><div class="sc-grade-bar-fill" id="sc-gbar"></div></div>
+        </div>
+      </div>
+
+      <!-- Stat cells -->
+      <div class="sc-score-row">
+        <div class="sc-stat"><div class="sn" id="sc-correct">—</div><div class="sl">Correct</div></div>
+        <div class="sc-stat"><div class="sn" id="sc-wrong">—</div><div class="sl">Wrong</div></div>
+        <div class="sc-stat"><div class="sn" id="sc-score-pct">—</div><div class="sl">Score</div></div>
+        <div class="sc-stat"><div class="sn" id="sc-time">—</div><div class="sl">Minutes</div></div>
+      </div>
+
+      <!-- Per-topic breakdown -->
+      <div class="sc-breakdown">
+        <p class="sc-breakdown-title">Score by Topic</p>
+        <div id="sc-breakdown-rows"></div>
+      </div>
+
+    </div><!-- /sc-body -->
+
+    <div class="sc-footer">
+      <span class="sc-footer-lbl">FLUTTER UNIT 1 &amp; 2 QUIZ · OFFICIAL RESULT · CREATED BY ABEL TADESSE</span>
+      <span class="sc-footer-tag">flutter.dev</span>
+    </div>
+
+  </div><!-- /screenshot-card -->
+
+  <!-- Full review (not in screenshot) -->
+  <p class="review-hdr">Full Review</p>
+  <div id="r-review"></div>
+
+  <div class="res-buttons">
+    <button class="btn-submit" id="btn-submit" onclick="captureAndSubmit()">
+      <span class="btn-submit-lbl">📸 Submit to Classroom</span>
+      <span class="spin"></span>
+    </button>
+    <button class="btn-retry" onclick="resetQuiz()">🔁 Retake Quiz</button>
+    <button class="btn-print" onclick="window.print()">Print Results</button>
+  </div>
+</div>
+
+<!-- CHEAT WARNING BANNER -->
+<div id="cheat-warning">
+  ⚠ Tab switch or window focus loss detected — leaving again will result in an automatic score of 0%.
+</div>
+
+<!-- ANTI-CHEAT OVERLAY -->
+<div id="anticheat-overlay">
+  <div class="ac-icon">🚫</div>
+  <div class="ac-title">Academic Integrity Violation</div>
+  <div class="ac-score">0%</div>
+  <div class="ac-score-label">Automatic score</div>
+  <div class="ac-msg">
+    You navigated away from this quiz tab while it was in progress.<br>
+    Switching tabs or leaving the window during a quiz is not permitted.<br>
+    Your score has been automatically set to <strong style="color:#e74c3c">0%</strong>.
+  </div>
+  <button class="ac-btn" onclick="acknowledgeCheat()">View Results &amp; Retry</button>
+</div>
+
+<!-- SUBMIT MODAL -->
+<div id="submit-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>📸 Screenshot Ready to Submit</h3>
+      <p>Your result card has been saved to your device</p>
+    </div>
+    <div class="modal-body">
+      <div class="modal-step">
+        <div class="modal-step-num">1</div>
+        <div class="modal-step-text">Your result screenshot has been <strong>downloaded automatically</strong> to your device's Downloads folder or gallery.</div>
+      </div>
+      <div class="modal-filename" id="modal-filename">
+        <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><rect x="2" y="1" width="12" height="14" rx="2" stroke="#16a34a" stroke-width="1.5"/><path d="M5 6h6M5 9h4" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span id="modal-fname-text">Flutter_Unit1_Result.png</span>
+      </div>
+      <div class="modal-step">
+        <div class="modal-step-num">2</div>
+        <div class="modal-step-text">Open your <strong>Google Classroom</strong> (or class WhatsApp/Teams group) and post the screenshot as your submission for Unit 1.</div>
+      </div>
+      <div class="modal-step">
+        <div class="modal-step-num">3</div>
+        <div class="modal-step-text">Make sure your <strong>name, student ID, score, and attempt number</strong> are all visible in the image before submitting.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn-close" onclick="closeSubmitModal()">Done — Close</button>
+      <button class="modal-btn-again" onclick="captureAndSubmit()">Save Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- INCOGNITO BLOCK -->
+<div id="incognito-block">
+  <div class="block-icon">🕵️</div>
+  <div class="block-title">Incognito / Private Mode Detected</div>
+  <div class="block-msg">
+    This quiz <strong>cannot be taken in Incognito or Private browsing mode.</strong><br>
+    Attempt tracking and academic integrity monitoring require normal browser mode.<br><br>
+    Please close this window, open a <strong>regular browser tab</strong>, and reload the quiz.
+  </div>
+</div>
+
+<!-- SPLIT-SCREEN BLOCK -->
+<div id="splitscreen-block">
+  <div class="block-icon">🪟</div>
+  <div class="block-title">Split Screen Detected</div>
+  <div class="block-msg">
+    This quiz must be taken in a <strong>full-screen window.</strong><br>
+    Split-screen or reduced window mode is not permitted during the assessment.<br><br>
+    Please maximise your browser window and the quiz will resume automatically.
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   TAG STYLE MAP
+═══════════════════════════════════════════════════════════════ */
+const TAG_STYLE = {
+  "Flutter Basics":      "tt-flutter",
+  "Dart Language":       "tt-dart",
+  "Widget Fundamentals": "tt-widgets",
+  "Layouts & UI":        "tt-layout",
+  "State & Lifecycle":   "tt-stateful"
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   STUDENT ID FORMAT  —  ATE/####/###
+═══════════════════════════════════════════════════════════════ */
+function formatStudentId(input){
+  let raw = input.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+  let out = '';
+  // Build ATE/####/## pattern
+  const alpha = raw.slice(0,3);
+  const nums1 = raw.slice(3,7).replace(/[^0-9]/g,'');
+  const nums2 = raw.slice(7,9).replace(/[^0-9]/g,'');
+  out = alpha;
+  if(raw.length > 3) out += '/' + nums1;
+  if(raw.length > 7) out += '/' + nums2;
+  input.value = out;
+}
+
+function validateStudentId(val){
+  return /^ATE\/\d{4}\/\d{2}$/.test(val.trim());
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RETAKE COUNTER  —  persisted in localStorage per device
+═══════════════════════════════════════════════════════════════ */
+const RETAKE_KEY = 'flutter_unit1_retakes';
+
+function getRetakeCount(){
+  return parseInt(localStorage.getItem(RETAKE_KEY)||'0',10);
+}
+function incrementRetakeCount(){
+  const n = getRetakeCount()+1;
+  localStorage.setItem(RETAKE_KEY, n);
+  return n;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SHUFFLE ANSWER OPTIONS  —  randomises correct answer position
+═══════════════════════════════════════════════════════════════ */
+function shuffleAnswers(){
+  QS.forEach(q=>{
+    // Pair each option with its original index
+    const paired = q.opts.map((opt,i)=>({opt,isCorrect:i===q.ans}));
+    // Fisher-Yates shuffle
+    for(let i=paired.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [paired[i],paired[j]]=[paired[j],paired[i]];
+    }
+    q.opts = paired.map(p=>p.opt);
+    q.ans  = paired.findIndex(p=>p.isCorrect);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   QUESTION BANK  —  35 questions
+═══════════════════════════════════════════════════════════════ */
+const QS = [
+
+  /* ══════════════════════════════════════════════════════════
+     FLUTTER BASICS  (7 questions)
+  ══════════════════════════════════════════════════════════ */
+  {
+    tag:"Flutter Basics",
+    q:"What is Flutter?",
+    opts:[
+      "A server-side framework for building REST APIs",
+      "An open-source UI toolkit by Google for building natively compiled apps from a single codebase",
+      "A JavaScript library for building web interfaces, similar to React",
+      "A database management system for mobile apps"
+    ],
+    ans:1,
+    exp:"Flutter is Google's open-source UI toolkit that compiles to native ARM code. A single Dart codebase targets iOS, Android, Web, Desktop, and Embedded — without a JavaScript bridge. This is what gives Flutter its performance advantage over hybrid frameworks like React Native."
+  },
+  {
+    tag:"Flutter Basics",
+    q:"Which programming language is used to build Flutter applications?",
+    opts:["JavaScript","Kotlin","Dart","Swift"],
+    ans:2,
+    exp:"Flutter uses <strong>Dart</strong>, a strongly-typed, object-oriented language also developed by Google. Dart compiles to native machine code (AOT compilation) for production, and uses a JIT compiler during development to enable Hot Reload."
+  },
+  {
+    tag:"Flutter Basics",
+    q:"What does <em>Hot Reload</em> do in Flutter development?",
+    opts:[
+      "Restarts the entire app from scratch, resetting all state",
+      "Injects updated source code into the running Dart VM and rebuilds the widget tree, preserving app state",
+      "Deploys the app to a physical device over USB",
+      "Clears the device cache and restarts Flutter services"
+    ],
+    ans:1,
+    exp:"<strong>Hot Reload</strong> (keyboard shortcut <code>r</code>) injects new code into the running VM and rebuilds the widget tree in under a second — keeping state intact. It's ideal for UI tweaks. <strong>Hot Restart</strong> (<code>R</code>) fully restarts the Dart runtime, resets state, and is needed when you add new fields, change <code>initState</code>, or add imports."
+  },
+  {
+    tag:"Flutter Basics",
+    q:"What is the fundamental principle of Flutter's UI model?",
+    opts:[
+      "Flutter uses native platform views (UIView on iOS, View on Android)",
+      "Everything is a Widget — the entire UI is a tree of immutable widget descriptions",
+      "Flutter generates HTML and CSS that is rendered in a WebView",
+      "UI components are defined in XML layout files, similar to Android"
+    ],
+    ans:1,
+    exp:"In Flutter, <strong>everything is a Widget</strong> — from a button to an entire screen, from padding to a theme. Widgets are immutable descriptions of a part of the UI. Flutter's rendering engine (Skia/Impeller) draws every pixel itself, bypassing native UI components entirely. This is why Flutter looks identical on all platforms."
+  },
+  {
+    tag:"Flutter Basics",
+    q:"Which widget serves as the root of every Flutter Material Design application?",
+    opts:[
+      "<code>Scaffold</code>",
+      "<code>Container</code>",
+      "<code>MaterialApp</code>",
+      "<code>Widget</code>"
+    ],
+    ans:2,
+    exp:"<code>MaterialApp</code> is the root of a Material Design app. It provides app-level configuration: <code>theme</code>, <code>routes</code>, <code>home</code>, and <code>navigatorKey</code>. Without it, widgets like <code>Scaffold</code>, <code>AppBar</code>, and <code>ElevatedButton</code> cannot access the Material theme and will throw errors."
+  },
+  {
+    tag:"Flutter Basics",
+    q:"What does the <code>Scaffold</code> widget provide?",
+    opts:[
+      "An invisible layout wrapper that only handles padding",
+      "The basic Material Design page structure: AppBar, body, FAB, Drawer, and BottomNavigationBar slots",
+      "A scrollable list of widgets",
+      "A navigation stack for managing multiple screens"
+    ],
+    ans:1,
+    exp:"<code>Scaffold</code> provides the visual skeleton of a Material Design page. It gives you named slots — <code>appBar</code>, <code>body</code>, <code>floatingActionButton</code>, <code>drawer</code>, <code>bottomNavigationBar</code>, <code>snackBar</code> — and handles their correct positioning automatically. You should have exactly one <code>Scaffold</code> per screen."
+  },
+  {
+    tag:"Flutter Basics",
+    q:"A developer modifies the <code>initState()</code> method of a StatefulWidget and presses <code>r</code> in the terminal. The change does not appear. Why?",
+    opts:[
+      "Hot Reload cannot update StatefulWidgets — you need to rebuild the entire project",
+      "Hot Reload preserves state, so changes to initState() are not re-executed — a Hot Restart (R) is required",
+      "initState() is only called once per app launch, regardless of Hot Reload or Hot Restart",
+      "The developer must manually call setState() to see initState() changes"
+    ],
+    ans:1,
+    exp:"<code>initState()</code> runs once when the State object is created. Hot Reload (<code>r</code>) injects code and rebuilds widgets but does NOT recreate State objects — so <code>initState()</code> is not re-called. Hot Restart (<code>R</code>) destroys the Dart VM and starts fresh, calling <code>initState()</code> again. This is the most common reason Hot Reload 'doesn't work' for students."
+  },
+
+  /* ══════════════════════════════════════════════════════════
+     DART LANGUAGE  (7 questions)
+  ══════════════════════════════════════════════════════════ */
+  {
+    tag:"Dart Language",
+    q:"What is the output of this Dart code?",
+    code:`<span class="kw">void</span> main() {
+  <span class="kw">int</span> x = <span class="num">5</span>;
+  <span class="kw">int</span> y = x++;
+  print(<span class="str">'\$x \$y'</span>);
+}`,
+    opts:["5 5","6 5","5 6","6 6"],
+    ans:1,
+    exp:"<code>x++</code> is post-increment: <code>y</code> receives the <em>original</em> value <code>5</code>, then <code>x</code> is incremented to <code>6</code>. Output: <code>6 5</code>. Use <code>++x</code> (pre-increment) if you need <code>y</code> to receive the incremented value."
+  },
+  {
+    tag:"Dart Language",
+    q:"Which Dart keyword declares a variable whose value can <em>never</em> be reassigned after initialisation?",
+    opts:["<code>const</code>","<code>static</code>","<code>final</code>","<code>immutable</code>"],
+    ans:2,
+    exp:"<code>final</code> prevents reassignment of the variable reference after initialisation, but the value does not need to be known at compile time. <code>const</code> is stricter — the value must be a compile-time constant. Use <code>final</code> for most immutable variables (e.g., <code>final name = 'Alice';</code>) and <code>const</code> for compile-time constants (e.g., widget instances)."
+  },
+  {
+    tag:"Dart Language",
+    q:"What does the <code>?</code> after a type name mean in Dart (e.g., <code>String?</code>)?",
+    opts:[
+      "The variable is optional and may be omitted from a function call",
+      "The type is nullable — the variable can hold either a String value or null",
+      "The variable is a conditional expression that returns a boolean",
+      "The type is inferred automatically by the Dart compiler"
+    ],
+    ans:1,
+    exp:"Dart has <strong>sound null safety</strong> since Dart 2.12. <code>String?</code> (nullable) can hold a <code>String</code> or <code>null</code>. <code>String</code> (non-nullable) can never be null — the compiler guarantees it. This prevents the billion-dollar mistake of null pointer exceptions. Access nullable values with <code>??</code> (null-coalescing), <code>?.</code> (null-aware access), or explicit null checks."
+  },
+  {
+    tag:"Dart Language",
+    q:"What is the output of this Dart code?",
+    code:`<span class="kw">void</span> main() {
+  <span class="kw">String?</span> name = <span class="kw">null</span>;
+  print(name ?? <span class="str">'Guest'</span>);
+  print(name?.length);
+}`,
+    opts:["null  null","Guest  null","Guest  0","null  0"],
+    ans:1,
+    exp:"<code>??</code> (null-coalescing) returns the right-hand value when the left is <code>null</code> — so <code>null ?? 'Guest'</code> prints <code>Guest</code>. <code>?.</code> (null-aware access) returns <code>null</code> instead of throwing when the object is null — so <code>null?.length</code> prints <code>null</code>. These operators are essential for safe null handling in Flutter."
+  },
+  {
+    tag:"Dart Language",
+    q:"Which Dart feature allows you to embed expressions directly inside string literals?",
+    opts:[
+      "String concatenation with the <code>+</code> operator",
+      "String interpolation using <code>\\$variable</code> or <code>\\${expression}</code>",
+      "Template literals using backtick characters",
+      "The <code>format()</code> method on the String class"
+    ],
+    ans:1,
+    exp:"Dart supports <strong>string interpolation</strong>: embed a variable with <code>\\$name</code> or an expression with <code>\\${a + b}</code>. For example: <code>'Hello \\$name, you have \\${messages.length} messages'</code>. This is cleaner than concatenation and is the idiomatic Dart way to build strings."
+  },
+  {
+    tag:"Dart Language",
+    q:"What does the <code>=></code> (arrow) syntax mean in Dart?",
+    opts:[
+      "It is the comparison operator, equivalent to <code>>=</code>",
+      "It creates a lambda function with a single expression body — shorthand for <code>{ return expr; }</code>",
+      "It defines a named constructor",
+      "It is used for type casting"
+    ],
+    ans:1,
+    exp:"The arrow <code>=></code> is syntactic sugar for a function body with a single <code>return</code> statement. <code>int double(int n) => n * 2;</code> is identical to <code>int double(int n) { return n * 2; }</code>. It is widely used in Flutter for <code>build()</code> methods and callbacks: <code>onPressed: () => setState(() => _count++)</code>."
+  },
+  {
+    tag:"Dart Language",
+    q:"What is the difference between <code>const</code> and <code>final</code> in Dart?",
+    opts:[
+      "They are identical — both prevent reassignment after initialisation",
+      "<code>const</code> requires the value to be known at compile time and creates a canonicalised object; <code>final</code> can be set at runtime but cannot be reassigned",
+      "<code>final</code> is only for primitive types; <code>const</code> works on all types",
+      "<code>const</code> is for class-level variables; <code>final</code> is for local variables only"
+    ],
+    ans:1,
+    exp:"<code>final</code>: set once at runtime. <code>const</code>: compile-time constant — the value must be computable at compile time. Flutter uses <code>const</code> constructors extensively (<code>const Text('Hello')</code>) because <strong>const widgets are canonicalised</strong>: Flutter creates the object once and reuses it, skipping rebuilds. This is a significant performance optimisation."
+  },
+
+  /* ══════════════════════════════════════════════════════════
+     WIDGET FUNDAMENTALS  (7 questions)
+  ══════════════════════════════════════════════════════════ */
+  {
+    tag:"Widget Fundamentals",
+    q:"What is the key difference between a <code>StatelessWidget</code> and a <code>StatefulWidget</code>?",
+    opts:[
+      "StatelessWidget cannot have children; StatefulWidget can",
+      "StatelessWidget is immutable and rebuilt only when its parent changes; StatefulWidget holds a mutable State object and can trigger rebuilds itself via setState()",
+      "StatelessWidget is faster because it uses native platform rendering",
+      "StatefulWidget can only be used inside a Scaffold"
+    ],
+    ans:1,
+    exp:"A <code>StatelessWidget</code> is a pure function of its inputs — given the same constructor parameters, it always produces the same UI. A <code>StatefulWidget</code> creates a separate <code>State</code> object that can hold mutable data. When <code>setState()</code> is called, Flutter schedules a rebuild. The widget itself is still immutable — only the State object changes."
+  },
+  {
+    tag:"Widget Fundamentals",
+    q:"What does this Flutter code display?",
+    code:`<span class="kw">class</span> <span class="type">MyApp</span> <span class="kw">extends</span> <span class="type">StatelessWidget</span> {
+  <span class="kw">const</span> MyApp({<span class="kw">super</span>.key});
+
+  <span class="ann">@override</span>
+  <span class="type">Widget</span> build(<span class="type">BuildContext</span> context) {
+    <span class="kw">return</span> <span class="widget">MaterialApp</span>(
+      home: <span class="widget">Scaffold</span>(
+        appBar: <span class="widget">AppBar</span>(title: <span class="kw">const</span> <span class="widget">Text</span>(<span class="str">'Hello Flutter'</span>)),
+        body: <span class="kw">const</span> <span class="widget">Center</span>(
+          child: <span class="widget">Text</span>(<span class="str">'Welcome!'</span>),
+        ),
+      ),
+    );
+  }
+}`,
+    opts:[
+      "A blank white screen",
+      "A screen with an AppBar titled 'Hello Flutter' and centred body text 'Welcome!'",
+      "A screen with only the text 'Welcome!' in the top-left corner",
+      "A compilation error — const cannot be used with Text"
+    ],
+    ans:1,
+    exp:"<code>MaterialApp</code> sets up the app root. <code>Scaffold</code> provides the page structure. <code>AppBar</code> renders at the top with the title. <code>Center</code> centres its child both horizontally and vertically. The result is an AppBar reading 'Hello Flutter' and the word 'Welcome!' centred on the screen. <code>const</code> on widgets is valid and encouraged — it creates compile-time constant widgets."
+  },
+  {
+    tag:"Widget Fundamentals",
+    q:"In Flutter's widget tree, which object is responsible for holding the mutable state of a StatefulWidget?",
+    opts:[
+      "The StatefulWidget class itself",
+      "The BuildContext object",
+      "The separate State&lt;T&gt; object created by createState()",
+      "The parent widget that contains the StatefulWidget"
+    ],
+    ans:2,
+    exp:"The <code>StatefulWidget</code> class is itself <strong>immutable</strong> — it cannot hold mutable fields. It calls <code>createState()</code> to create a separate <code>State&lt;T&gt;</code> object that persists across rebuilds. The State object is mutable and is where you declare variables, override <code>initState()</code>, and call <code>setState()</code>. This separation is intentional: widget = immutable description, State = mutable data."
+  },
+  {
+    tag:"Widget Fundamentals",
+    q:"Which statement about Flutter widgets is correct?",
+    opts:[
+      "Widgets are long-lived objects that are mutated in place when the UI changes",
+      "Widgets are lightweight, immutable descriptions of the UI — they are cheap to create and are recreated frequently",
+      "Each widget corresponds directly to a native view on the platform (UIView / Android View)",
+      "Widgets can only be used once in the widget tree — you cannot reuse the same widget instance"
+    ],
+    ans:1,
+    exp:"Flutter widgets are <strong>immutable blueprints</strong> — they describe what the UI should look like, not the UI itself. They are very cheap to create and may be recreated many times per second during animations. Flutter maintains a separate <em>Element tree</em> and <em>RenderObject tree</em> that are expensive to create but are reconciled efficiently against the widget tree (similar to React's virtual DOM)."
+  },
+  {
+    tag:"Widget Fundamentals",
+    q:"What is the purpose of the <code>key</code> parameter that most Flutter widgets accept?",
+    opts:[
+      "It sets a unique API key for network requests made by the widget",
+      "It is used by Flutter to identify and preserve widget state across rebuilds, especially in dynamic lists",
+      "It assigns a CSS class-like identifier for styling",
+      "It is required on all widgets and causes an error if omitted"
+    ],
+    ans:1,
+    exp:"<code>Key</code>s help Flutter's reconciliation algorithm match widgets between rebuilds. Without keys in a dynamic list, Flutter may associate the wrong State object with the wrong widget when items are reordered or removed. Always provide a <code>Key(item.id)</code> or <code>ValueKey</code> to list items. The <code>key</code> parameter is optional — it's only required when identity matters across rebuilds."
+  },
+  {
+    tag:"Widget Fundamentals",
+    q:"What does the <code>build(BuildContext context)</code> method do?",
+    opts:[
+      "It compiles the widget to native code and caches the result",
+      "It returns the widget tree that describes this widget's UI; called by Flutter whenever a rebuild is needed",
+      "It initialises the widget's state before the first frame",
+      "It is called once when the widget is first inserted and never again"
+    ],
+    ans:1,
+    exp:"The <code>build()</code> method is Flutter's UI declaration. It should be <strong>pure</strong> — no side effects, no async calls, no <code>setState()</code> calls inside it. Flutter may call <code>build()</code> many times (after <code>setState()</code>, parent rebuild, or screen resize). Keeping it fast and pure is essential for 60fps performance."
+  },
+  {
+    tag:"Widget Fundamentals",
+    q:"A developer writes: <code>Text myText = Text('Hello');</code> and then tries to change it later with <code>myText.data = 'World';</code>. What happens?",
+    opts:[
+      "The text on screen updates to 'World'",
+      "A compile-time error — Text.data is a final field and cannot be reassigned",
+      "A runtime exception is thrown when the screen tries to render",
+      "The widget silently ignores the change"
+    ],
+    ans:1,
+    exp:"Flutter widgets are <strong>immutable</strong> — all their fields are <code>final</code>. You <em>cannot</em> mutate a widget. Instead, you call <code>setState()</code> to cause Flutter to call <code>build()</code> again with a <em>new</em> widget instance containing the new data. This design makes the framework predictable and efficient — Flutter diffs the old and new trees rather than tracking mutations."
+  },
+
+  /* ══════════════════════════════════════════════════════════
+     LAYOUTS & UI  (8 questions)
+  ══════════════════════════════════════════════════════════ */
+  {
+    tag:"Layouts & UI",
+    q:"What does the <code>mainAxisAlignment</code> property of a <code>Column</code> control?",
+    opts:[
+      "The alignment of the Column's children along the horizontal (cross) axis",
+      "The alignment of the Column's children along the vertical (main) axis — how space is distributed top to bottom",
+      "The maximum width of the Column's children",
+      "Whether the Column scrolls vertically"
+    ],
+    ans:1,
+    exp:"For a <code>Column</code>, the <strong>main axis is vertical</strong>. <code>mainAxisAlignment</code> controls how children are spaced vertically: <code>start</code>, <code>center</code>, <code>end</code>, <code>spaceBetween</code>, <code>spaceAround</code>, <code>spaceEvenly</code>. The <strong>cross axis is horizontal</strong>, controlled by <code>crossAxisAlignment</code>. For a <code>Row</code>, these axes are swapped."
+  },
+  {
+    tag:"Layouts & UI",
+    q:"What does <code>Expanded</code> do when placed inside a <code>Row</code> or <code>Column</code>?",
+    opts:[
+      "It increases the font size of its child to fill the available space",
+      "It forces its child to take all remaining space along the main axis after other children have been laid out",
+      "It adds padding around its child equal to the remaining space",
+      "It makes its child scrollable when it overflows"
+    ],
+    ans:1,
+    exp:"<code>Expanded</code> tells Flutter: 'give this child all the <em>remaining</em> space along the main axis'. Multiple <code>Expanded</code> widgets split remaining space proportionally using their <code>flex</code> factor (default: 1). <code>Flexible</code> is similar but can be <em>smaller</em> than its allotted space if the child doesn't need it. <code>Expanded</code> = must fill; <code>Flexible</code> = may fill."
+  },
+  {
+    tag:"Layouts & UI",
+    q:"Which layout widget allows children to overlap each other?",
+    opts:["<code>Row</code>","<code>Column</code>","<code>Stack</code>","<code>Wrap</code>"],
+    ans:2,
+    exp:"<code>Stack</code> layers its children on top of each other on the Z-axis. The first child is at the bottom, the last is on top. Use <code>Positioned</code> inside a Stack to place children at specific coordinates (like CSS absolute positioning). Common use cases: image overlays, badges, floating labels, custom hero banners."
+  },
+  {
+    tag:"Layouts & UI",
+    q:"What is the purpose of <code>EdgeInsets.symmetric(horizontal: 16, vertical: 8)</code>?",
+    opts:[
+      "It creates a border with 16px horizontal edges and 8px vertical edges",
+      "It defines padding of 16px on the left and right sides, and 8px on the top and bottom",
+      "It centres a widget within a 16×8 pixel bounding box",
+      "It adds a 16px margin horizontally and clips the widget to 8px vertically"
+    ],
+    ans:1,
+    exp:"<code>EdgeInsets</code> defines spacing for <code>Padding</code>, <code>Container.padding</code>, and <code>Container.margin</code>. <code>symmetric(horizontal: 16, vertical: 8)</code> = left/right: 16px, top/bottom: 8px. Other constructors: <code>all(16)</code> for equal sides, <code>only(left:8, top:4)</code> for individual sides, <code>fromLTRB(l,t,r,b)</code> for all four explicitly."
+  },
+  {
+    tag:"Layouts & UI",
+    q:"What happens if a <code>Column</code> contains more children than can fit on the screen?",
+    opts:[
+      "Flutter automatically clips the overflow and nothing is shown beyond the screen edge",
+      "A yellow-and-black overflow warning stripe is shown and a RenderFlex overflow error is printed",
+      "The Column automatically becomes scrollable",
+      "Flutter throws a fatal error and crashes the app"
+    ],
+    ans:1,
+    exp:"Flutter renders a yellow-and-black overflow stripe at the edge and logs a <strong>RenderFlex overflowed</strong> error to the console. The app continues to run but the overflowed pixels are invisible. Fix: wrap the Column in a <code>SingleChildScrollView</code> to make it scrollable, or use <code>ListView</code> instead. <code>Expanded</code> inside the Column can also help by constraining children."
+  },
+  {
+    tag:"Layouts & UI",
+    q:"What does a <code>Container</code> without a specified width or height do?",
+    opts:[
+      "It always fills the entire screen (width: double.infinity, height: double.infinity)",
+      "It sizes itself to match its child, or fills the parent if it has no child",
+      "It defaults to 100×100 pixels on all platforms",
+      "It becomes invisible — you must always specify dimensions"
+    ],
+    ans:1,
+    exp:"<code>Container</code> without a child → fills its parent. <code>Container</code> with a child → wraps to child's size. This behaviour can be overridden with explicit <code>width</code>, <code>height</code>, or <code>constraints</code>. <code>SizedBox</code> is preferred when you only need dimensions (without colour, decoration, or padding) — it's lighter weight than <code>Container</code>."
+  },
+  {
+    tag:"Layouts & UI",
+    q:"Which property of <code>Container</code> would you use to add a rounded border and a background colour simultaneously?",
+    opts:[
+      "Set both <code>color: Colors.blue</code> and <code>borderRadius: BorderRadius.circular(8)</code> as direct properties",
+      "Set <code>decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(8))</code>",
+      "Wrap the Container in a <code>ClipRRect</code> widget with the same radius",
+      "Use the <code>style</code> property with a <code>BoxStyle</code> object"
+    ],
+    ans:1,
+    exp:"When you need both colour and a border/radius, use <code>BoxDecoration</code>. You <strong>cannot</strong> use both <code>Container(color: ...)</code> and <code>Container(decoration: BoxDecoration(...))</code> simultaneously — this throws: <em>'Cannot provide both a color and a decoration'</em>. Instead, put the colour inside the <code>BoxDecoration</code>: <code>decoration: BoxDecoration(color: Colors.blue, borderRadius: ...)</code>."
+  },
+  {
+    tag:"Layouts & UI",
+    q:"What is the difference between <code>mainAxisSize: MainAxisSize.min</code> and <code>MainAxisSize.max</code> on a Column?",
+    opts:[
+      "min makes children as small as possible; max makes them as large as possible",
+      "min shrink-wraps the Column to its children's height; max stretches the Column to fill the available height",
+      "min limits the number of children; max allows unlimited children",
+      "They are identical in most layout scenarios"
+    ],
+    ans:1,
+    exp:"<code>MainAxisSize.max</code> (default): the Column expands to fill all available vertical space. <code>MainAxisSize.min</code>: the Column shrinks to exactly fit its children. Use <code>min</code> when you want a Column inside a dialog or card to wrap its content tightly, rather than stretching to fill the screen."
+  },
+
+  /* ══════════════════════════════════════════════════════════
+     STATE & LIFECYCLE  (6 questions)
+  ══════════════════════════════════════════════════════════ */
+  {
+    tag:"State & Lifecycle",
+    q:"In which lifecycle method should you initialise a <code>TextEditingController</code>?",
+    opts:[
+      "<code>build()</code> — controllers should be created fresh on every rebuild",
+      "<code>initState()</code> — called once when the State object is created",
+      "<code>didUpdateWidget()</code> — called when the widget's configuration changes",
+      "<code>dispose()</code> — called when the widget is removed"
+    ],
+    ans:1,
+    exp:"<code>initState()</code> is called <strong>once</strong> when the State object is first inserted into the tree. It's the correct place to create controllers, subscribe to streams, and fetch initial data. <strong>Never</strong> create controllers in <code>build()</code> — that creates a new controller on every rebuild, causing memory leaks and losing user input. Always pair creation in <code>initState()</code> with cleanup in <code>dispose()</code>."
+  },
+  {
+    tag:"State & Lifecycle",
+    q:"What does <code>setState()</code> do — and what does it <em>not</em> do?",
+    opts:[
+      "It immediately repaints the screen and returns the updated widget",
+      "It marks the widget as 'dirty' and schedules a rebuild; Flutter calls build() on the next frame. It does NOT rebuild the entire app — only this widget's subtree.",
+      "It synchronously calls build() and returns the new widget tree",
+      "It updates all instances of the same widget class across the entire app"
+    ],
+    ans:1,
+    exp:"<code>setState(() { ... })</code> does two things: (1) runs the callback to mutate state, and (2) marks the widget's <code>Element</code> as dirty, scheduling a call to <code>build()</code> on the next frame. It does <strong>NOT</strong> rebuild the whole screen — only the subtree rooted at the widget that called <code>setState()</code>. Mutations <strong>must</strong> happen inside the callback, not before calling <code>setState()</code>."
+  },
+  {
+    tag:"State & Lifecycle",
+    q:"Why is it critical to call <code>dispose()</code> on a <code>TextEditingController</code>?",
+    opts:[
+      "To save the text field's current value to persistent storage",
+      "To release native memory and remove listeners — forgetting it causes memory leaks",
+      "To reset the text field to empty when the screen is removed",
+      "dispose() is optional — Dart's garbage collector automatically cleans up controllers"
+    ],
+    ans:1,
+    exp:"<code>TextEditingController</code> registers listeners and holds native resources. If you don't call <code>controller.dispose()</code> in the State's <code>dispose()</code> method, those listeners remain active after the widget is removed — causing memory leaks that worsen over time as the user navigates. The same applies to <code>AnimationController</code>, <code>FocusNode</code>, <code>StreamSubscription</code>, and any object that holds a listener."
+  },
+  {
+    tag:"State & Lifecycle",
+    q:"What is the correct way to call an async function from <code>initState()</code>?",
+    opts:[
+      "<code>async initState() { await _loadData(); }</code>",
+      "Define a separate <code>async</code> method and call it from <code>initState()</code>: <code>void initState() { super.initState(); _loadData(); }</code>",
+      "You cannot perform async operations from initState() — use a FutureBuilder instead",
+      "<code>initState() async { super.initState(); await _loadData(); }</code>"
+    ],
+    ans:1,
+    exp:"<code>initState()</code> <strong>cannot</strong> be declared <code>async</code> — its signature is <code>void initState()</code>. The workaround: define a separate <code>Future&lt;void&gt; _loadData() async { ... }</code> method and call it (without <code>await</code>) from <code>initState()</code>. Flutter schedules it on the event loop and the UI renders normally while data loads. Always call <code>super.initState();</code> first."
+  },
+  {
+    tag:"State & Lifecycle",
+    q:"Which of the following correctly describes the lifecycle order for a StatefulWidget?",
+    opts:[
+      "build() → createState() → initState() → dispose()",
+      "createState() → initState() → build() → [setState() → build()]* → dispose()",
+      "initState() → createState() → build() → dispose()",
+      "build() → initState() → [setState()]* → createState() → dispose()"
+    ],
+    ans:1,
+    exp:"The correct lifecycle: (1) <strong>createState()</strong> — creates the State object once; (2) <strong>initState()</strong> — initialise resources; (3) <strong>build()</strong> — render the UI; (4) <strong>setState()</strong> + <strong>build()</strong> — repeat on each state change; (5) <strong>didUpdateWidget()</strong> — if parent rebuilds with new config; (6) <strong>dispose()</strong> — clean up on removal. Understanding this order is essential for avoiding bugs."
+  },
+  {
+    tag:"State & Lifecycle",
+    q:"What is the correct way to update the UI when a user taps a button that should toggle a boolean variable <code>_isOn</code>?",
+    opts:[
+      "<code>onPressed: () { _isOn = !_isOn; }</code>",
+      "<code>onPressed: () { setState(() { _isOn = !_isOn; }); }</code>",
+      "<code>onPressed: () { setState(_isOn = !_isOn); }</code>",
+      "<code>onPressed: setState(() { _isOn = !_isOn; })</code>"
+    ],
+    ans:1,
+    exp:"Mutations must happen <strong>inside</strong> the <code>setState()</code> callback: <code>setState(() { _isOn = !_isOn; });</code>. Option A mutates state but never schedules a rebuild — the UI stays frozen. Option C passes an expression (not a function) to setState. Option D calls setState at build time without the <code>() =></code> wrapper — this would call setState immediately on every build. The correct pattern is always: <code>setState(() { /* mutate */ });</code>."
+  }
+
+]; // end QS
+
+/* ═══════════════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════════════ */
+let cur = 0;
+const chosen  = new Array(QS.length).fill(null);
+const locked  = new Array(QS.length).fill(false);
+let quizActive    = false;
+let cheatWarned   = false;
+let cheatDetected = false;
+let studentName   = '';
+let studentId     = '';
+let timerID, t0;
+let currentAttemptNum = 0;  // set when quiz starts
+
+/* ═══════════════════════════════════════════════════════════════
+   TIMER  —  25-minute countdown, auto-submits at 0:00
+═══════════════════════════════════════════════════════════════ */
+const QUIZ_DURATION = 25 * 60; // 25 minutes in seconds
+function startTimer(){
+  t0 = Date.now();
+  document.getElementById('timer-display').style.display = 'block';
+  timerID = setInterval(()=>{
+    const elapsed = Math.floor((Date.now()-t0)/1000);
+    const remaining = QUIZ_DURATION - elapsed;
+    if(remaining <= 0){
+      clearInterval(timerID);
+      document.getElementById('timer-val').textContent = '00:00';
+      document.getElementById('timer-display').style.color = '#e74c3c';
+      if(quizActive){
+        quizActive = false;
+        // Auto-lock all unanswered, then show results
+        for(let i=0;i<QS.length;i++){
+          if(!locked[i]){ locked[i]=true; }
+        }
+        showResults(false);
+        // Show timeout notice on results
+        setTimeout(()=>{
+          const note = document.createElement('div');
+          note.style.cssText='background:#fdf2f2;border-left:3px solid #c0392b;padding:14px 18px;margin-bottom:28px;border-radius:3px;font-size:13px;color:#7a1515;';
+          note.innerHTML='<strong style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px;">⏰ Time Expired — Auto Submitted</strong>The 25-minute time limit was reached and your quiz was automatically submitted.';
+          const review = document.getElementById('r-review');
+          review.parentNode.insertBefore(note, review);
+        }, 200);
+      }
+      return;
+    }
+    const m   = Math.floor(remaining/60);
+    const sec = remaining % 60;
+    document.getElementById('timer-val').textContent =
+      String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+    // Turn red in last 5 minutes
+    const timerEl = document.getElementById('timer-display');
+    if(remaining <= 300){
+      timerEl.style.color = remaining <= 60 ? '#e74c3c' : '#f59e0b';
+    } else {
+      timerEl.style.color = '';
+    }
+  },1000);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANTI-CHEAT
+═══════════════════════════════════════════════════════════════ */
+document.addEventListener('visibilitychange',()=>{
+  if(!quizActive) return;
+  if(document.hidden){
+    if(!cheatWarned){
+      cheatWarned = true;
+      document.getElementById('cheat-warning').classList.add('show');
+      setTimeout(()=>document.getElementById('cheat-warning').classList.remove('show'),5000);
+    } else {
+      cheatDetected = true;
+      quizActive = false;
+      clearInterval(timerID);
+      document.getElementById('anticheat-overlay').classList.add('show');
+    }
+  }
+});
+
+function acknowledgeCheat(){
+  document.getElementById('anticheat-overlay').classList.remove('show');
+  showResults(true);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════════════════════ */
+function tagPill(tag){
+  const cls = TAG_STYLE[tag]||'';
+  return `<span class="q-tag-pill ${cls}">${tag}</span>`;
+}
+
+function renderQ(qi){
+  const q    = QS[qi];
+  const keys = ['A','B','C','D'];
+  // During quiz: never show opt-ok/opt-no/icons — only highlight selection
+  const optHTML = q.opts.map((o,i)=>`
+    <div class="opt${chosen[qi]===i?' opt-sel':''}${locked[qi]?' opt-locked':''}"
+         id="opt-${qi}-${i}" onclick="selectOpt(${qi},${i})">
+      <div class="opt-letter">${keys[i]}</div>
+      <div class="opt-text">${o}</div>
+      <div class="opt-icon"></div>
+    </div>`).join('');
+
+  const codeHTML = q.code ? `<div class="code-block">${q.code}</div>` : '';
+
+  // No feedback shown during quiz at all
+  const fbHTML = `<div class="feedback-box" id="fb"></div>`;
+
+  document.getElementById('q-mount').innerHTML = `
+    <div class="q-header">
+      <span class="q-num">Q${qi+1} / ${QS.length}</span>
+      ${tagPill(q.tag)}
+    </div>
+    <div class="q-text">${q.q}</div>
+    ${q.sub ? `<div class="q-sub">${q.sub}</div>` : ''}
+    ${codeHTML}
+    <div class="options">${optHTML}</div>
+    ${fbHTML}
+    <div class="act-row">
+      ${qi>0?`<button class="btn-prev" onclick="navigateToQ(${qi-1})">← Previous</button>`:''}
+      <button class="btn-check" id="btn-check"
+        onclick="checkAnswer(${qi})"
+        ${chosen[qi]===null||locked[qi]?'disabled':''}>
+        ${locked[qi]?'Answered ✓':'Confirm Answer'}
+      </button>
+      <button class="btn-next" id="btn-next"
+        onclick="goNext(${qi})"
+        style="display:${locked[qi]?'inline-block':'none'}">
+        ${qi<QS.length-1?'Next Question →':'View Results →'}
+      </button>
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INTERACTION
+═══════════════════════════════════════════════════════════════ */
+function selectOpt(qi,i){
+  if(locked[qi]) return;
+  chosen[qi]=i;
+  renderQ(qi);
+}
+
+function updateDots(){
+  document.querySelectorAll('.q-dot').forEach((el,i)=>{
+    el.className='q-dot'+(i===cur?' active':'')+(locked[i]?' done-answered':'');
+  });
+}
+
+function updateSidebar(){
+  const answered = locked.filter(Boolean).length;
+  document.getElementById('sc-answered').textContent = answered+' / '+QS.length;
+  // Don't reveal score/correct count during quiz
+  document.getElementById('sc-correct').textContent = '—';
+  document.getElementById('sc-pct').textContent      = '—';
+}
+
+function updateProgress(){
+  const pct = locked.filter(Boolean).length/QS.length*100;
+  document.getElementById('prog').style.width = pct+'%';
+}
+
+function buildDots(){
+  const g = document.getElementById('dot-grid');
+  g.innerHTML = QS.map((_,i)=>`<div class="q-dot${i===0?' active':''}" id="dot-${i}" onclick="navigateToQ(${i})" style="cursor:pointer" title="Go to Q${i+1}">${i+1}</div>`).join('');
+}
+
+function navigateToQ(qi){
+  cur = qi;
+  renderQ(cur);
+  updateDots();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function checkAnswer(qi){
+  if(chosen[qi]===null||locked[qi]) return;
+  locked[qi]=true;
+
+  // No answer reveal during quiz — just lock the selection
+  document.getElementById('btn-check').style.display='none';
+  document.getElementById('btn-next').style.display='inline-block';
+
+  updateSidebar();
+  updateDots();
+  updateProgress();
+}
+
+function goNext(qi){
+  if(qi<QS.length-1){
+    cur=qi+1;
+    renderQ(cur);
+    updateDots();
+    window.scrollTo({top:0,behavior:'smooth'});
+  } else {
+    showResults(false);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESULTS
+═══════════════════════════════════════════════════════════════ */
+function showResults(forceZero){
+  quizActive=false;
+  clearInterval(timerID);
+
+  document.getElementById('quiz-screen').style.display    = 'none';
+  document.getElementById('results-screen').style.display = 'block';
+  document.getElementById('timer-display').style.display  = 'none';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  const ok   = forceZero?0:chosen.filter((c,i)=>c===QS[i].ans).length;
+  const pct  = forceZero?0:Math.round(ok/QS.length*100);
+  const mins = Math.max(1,Math.round((Date.now()-t0)/60000));
+  const now  = new Date();
+
+  // Save this attempt to history
+  saveAttemptResult(ok, QS.length, pct);
+
+  let grade,gname;
+  if(pct>=90){grade='A';gname='Distinction';}
+  else if(pct>=80){grade='B';gname='Merit';}
+  else if(pct>=70){grade='C';gname='Pass';}
+  else if(pct>=60){grade='D';gname='Near Pass';}
+  else{grade='F';gname='Needs Revision';}
+
+  // ── Populate screenshot card ───────────────────
+  const initials = studentName.split(' ').map(w=>w[0]||'').join('').toUpperCase().slice(0,2)||'?';
+
+  document.getElementById('sc-avatar').textContent       = initials;
+  document.getElementById('sc-student-name').textContent = studentName||'—';
+  document.getElementById('sc-student-meta').textContent =
+    'Student ID: '+(studentId||'—')+'  ·  Submitted: '+now.toLocaleString();
+  document.getElementById('sc-stamp-date').innerHTML =
+    now.toLocaleDateString('en-ZA',{year:'numeric',month:'short',day:'2-digit'})+'<br>'+
+    now.toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'});
+
+  // retake
+  const attemptLabel = currentAttemptNum===1
+    ? 'First attempt on this device 🎯'
+    : `Attempt #${currentAttemptNum} on this device`;
+  document.getElementById('sc-retake-text').textContent = attemptLabel;
+  // colour code retake row
+  const retakeRow = document.getElementById('sc-retake-row');
+  if(currentAttemptNum===1){
+    retakeRow.style.background='#F0FDF4';retakeRow.style.borderColor='#86EFAC';
+    document.getElementById('sc-retake-text').style.color='#14532D';
+  } else if(currentAttemptNum<=3){
+    retakeRow.style.background='#FFF8E7';retakeRow.style.borderColor='#FCD34D';
+    document.getElementById('sc-retake-text').style.color='#92400E';
+  } else {
+    retakeRow.style.background='#FFF1F2';retakeRow.style.borderColor='#FCA5A5';
+    document.getElementById('sc-retake-text').style.color='#7A1515';
+  }
+
+  // grade
+  document.getElementById('sc-grade-pill').textContent  = grade;
+  document.getElementById('sc-grade-label').textContent = pct+'%  ·  '+gname;
+  document.getElementById('sc-grade-sub').textContent   =
+    forceZero ? 'Score set to 0 — integrity violation'
+              : ok+' correct out of '+QS.length+' questions';
+
+  // stats
+  document.getElementById('sc-correct').textContent   = ok;
+  document.getElementById('sc-wrong').textContent     = QS.length-ok;
+  document.getElementById('sc-score-pct').textContent = pct+'%';
+  document.getElementById('sc-time').textContent      = mins+'m';
+
+  setTimeout(()=>{ document.getElementById('sc-gbar').style.width=pct+'%'; },200);
+
+  // per-topic breakdown inside card
+  const topics=[...new Set(QS.map(q=>q.tag))];
+  const bdHTML=topics.map(tag=>{
+    const tqs =QS.map((q,i)=>({q,i})).filter(({q})=>q.tag===tag);
+    const tOk =forceZero?0:tqs.filter(({i})=>chosen[i]===QS[i].ans).length;
+    const tPct=Math.round(tOk/tqs.length*100);
+    return `<div class="sc-bd-row">
+      <span class="sc-bd-label">${tag}</span>
+      <div class="sc-bd-track"><div class="sc-bd-fill" data-pct="${tPct}"></div></div>
+      <span class="sc-bd-pct">${tOk}/${tqs.length}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('sc-breakdown-rows').innerHTML=bdHTML;
+  setTimeout(()=>{
+    document.querySelectorAll('.sc-bd-fill').forEach(el=>{el.style.width=el.dataset.pct+'%';});
+  },350);
+
+  // ── Full review (below card) ───────────────────
+  const cheatNote=forceZero?`
+    <div style="background:#fdf2f2;border-left:3px solid #c0392b;padding:14px 18px;margin-bottom:28px;border-radius:3px;font-size:13px;color:#7a1515;">
+      <strong style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px;">⚠ Academic Integrity Violation</strong>
+      Score set to 0% automatically because the quiz window was left during the assessment.
+    </div>`:'';
+
+  const keys=['A','B','C','D'];
+  const reviewHTML=QS.map((q,i)=>{
+    const isOk=!forceZero&&chosen[i]===q.ans;
+    const strip=s=>s.replace(/<[^>]+>/g,'');
+    const yourLabel=forceZero
+      ?'Not scored (violation)'
+      :chosen[i]!==null&&chosen[i]!==-1
+        ?`${keys[chosen[i]]}. ${strip(q.opts[chosen[i]])}`
+        :'Not answered';
+    return `<div class="rev-item">
+      <div class="rev-n">Q${i+1}</div>
+      <div>
+        <div class="rev-qtext">${strip(q.q)}</div>
+        <div class="rev-ans-row">
+          ${isOk?'<span class="badge-ok">CORRECT</span>':'<span class="badge-no">INCORRECT</span>'}
+          <span class="rev-yours">Your answer: ${yourLabel}</span>
+        </div>
+        <div class="rev-exp ${isOk?'rev-exp-ok':'rev-exp-no'}">
+          <strong>✓ Correct Answer:</strong> ${keys[q.ans]}. ${strip(q.opts[q.ans])}
+        </div>
+        <div class="rev-explanation">${q.exp}</div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('r-review').innerHTML=cheatNote+reviewHTML;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCREENSHOT & SUBMIT
+═══════════════════════════════════════════════════════════════ */
+async function captureAndSubmit(){
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  // wait a tick for bar animations to finish
+  await new Promise(r=>setTimeout(r,600));
+
+  try {
+    const card = document.getElementById('screenshot-card');
+    const canvas = await html2canvas(card,{
+      scale: 2,
+      useCORS: true,
+      backgroundColor:'#ffffff',
+      logging: false,
+    });
+
+    // build filename: FirstnameLastname_FlutterUnit1_Attempt2.png
+    const safeName = (studentName||'Student').replace(/\s+/g,'_');
+    const fname = `${safeName}_FlutterUnit1and2_Attempt${currentAttemptNum}_${new Date().toISOString().slice(0,10)}.png`;
+
+    // trigger download
+    const link = document.createElement('a');
+    link.download = fname;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+
+    // show modal
+    document.getElementById('modal-fname-text').textContent = fname;
+    document.getElementById('submit-modal').classList.add('show');
+
+  } catch(err){
+    alert('Screenshot failed: '+err.message+'\n\nPlease use your device\'s built-in screenshot tool instead.');
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
+}
+
+function closeSubmitModal(){
+  document.getElementById('submit-modal').classList.remove('show');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FLOW
+═══════════════════════════════════════════════════════════════ */
+function startQuiz(){
+  const nameInput=document.getElementById('input-name');
+  const idInput  =document.getElementById('input-id');
+  const errName  =document.getElementById('err-name');
+  const errId    =document.getElementById('err-id');
+  let valid=true;
+
+  if(!nameInput.value.trim()){
+    nameInput.classList.add('input-error');errName.classList.add('show');valid=false;
+  } else {
+    nameInput.classList.remove('input-error');errName.classList.remove('show');
+  }
+  if(!idInput.value.trim() || !validateStudentId(idInput.value)){
+    idInput.classList.add('input-error');errId.classList.add('show');valid=false;
+  } else {
+    idInput.classList.remove('input-error');errId.classList.remove('show');
+  }
+  if(!valid) return;
+
+  studentName=nameInput.value.trim();
+  studentId  =idInput.value.trim();
+
+  const navEl=document.getElementById('nav-student');
+  navEl.textContent  =studentName+' · '+studentId;
+  navEl.style.display='block';
+
+  quizActive=true;cheatWarned=false;cheatDetected=false;
+  shuffleAnswers();
+  currentAttemptNum = incrementRetakeCount();
+
+  document.getElementById('start-screen').style.display='none';
+  document.getElementById('quiz-screen').style.display ='block';
+  buildDots();renderQ(0);updateSidebar();startTimer();
+}
+
+function resetQuiz(){
+  cur=0;
+  chosen.fill(null);
+  locked.fill(false);
+  quizActive=false;cheatWarned=false;cheatDetected=false;
+  studentName='';studentId='';
+
+  document.getElementById('nav-student').style.display='none';
+  document.getElementById('nav-student').textContent='';
+  document.getElementById('input-name').value='';
+  document.getElementById('input-id').value='';
+  document.getElementById('input-name').classList.remove('input-error');
+  document.getElementById('input-id').classList.remove('input-error');
+  document.getElementById('err-name').classList.remove('show');
+  document.getElementById('err-id').classList.remove('show');
+  document.getElementById('results-screen').style.display ='none';
+  document.getElementById('anticheat-overlay').classList.remove('show');
+  document.getElementById('submit-modal').classList.remove('show');
+  document.getElementById('start-screen').style.display   ='block';
+  document.getElementById('prog').style.width             ='0';
+  document.getElementById('timer-display').style.display  ='none';
+
+  // show previous attempts notice on start screen
+  const prev = getRetakeCount();
+  let prevEl = document.getElementById('prev-attempts-notice');
+  if(!prevEl){
+    prevEl = document.createElement('div');
+    prevEl.id = 'prev-attempts-notice';
+    prevEl.style.cssText='font-family:var(--mono);font-size:11px;color:#92400E;background:#FFF8E7;border:1.5px solid #FCD34D;border-radius:4px;padding:10px 16px;margin-bottom:20px;display:flex;align-items:center;gap:8px;';
+    const startBtn = document.querySelector('.btn-start');
+    startBtn.parentNode.insertBefore(prevEl, startBtn);
+  }
+  if(prev>0){
+    prevEl.style.display='flex';
+    prevEl.innerHTML=`<span style="font-size:16px">🔁</span> This device has taken this quiz <strong style="margin:0 3px">${prev}</strong> time${prev===1?'':'s'}. Attempt #${prev+1} will be recorded.`;
+  } else {
+    prevEl.style.display='none';
+  }
+
+  window.scrollTo({top:0,behavior:'smooth'});
+  renderAttemptBadge();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ATTEMPT HISTORY  —  store per-attempt scores
+═══════════════════════════════════════════════════════════════ */
+const ATTEMPT_HISTORY_KEY = 'flutter_quiz_attempts';
+
+function getAttemptHistory(){
+  try{ return JSON.parse(localStorage.getItem(ATTEMPT_HISTORY_KEY)||'[]'); }
+  catch(e){ return []; }
+}
+function saveAttemptResult(score, total, pct){
+  const history = getAttemptHistory();
+  history.push({
+    n: history.length + 1,
+    score, total, pct,
+    date: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})
+  });
+  localStorage.setItem(ATTEMPT_HISTORY_KEY, JSON.stringify(history));
+}
+
+function renderAttemptBadge(){
+  const history = getAttemptHistory();
+  const badge   = document.getElementById('attempt-badge');
+  const list    = document.getElementById('attempt-badge-list');
+  if(!badge || !list) return;
+  if(history.length === 0){ badge.classList.remove('show'); return; }
+  badge.classList.add('show');
+  list.innerHTML = history.map(a=>`
+    <span class="attempt-pill" title="${a.date}">
+      #${a.n} — ${a.pct}% (${a.score}/${a.total})
+    </span>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INCOGNITO DETECTION
+═══════════════════════════════════════════════════════════════ */
+function detectIncognito(){
+  return new Promise(resolve=>{
+    // Method 1: IndexedDB (disabled in Safari private)
+    try{
+      const db = indexedDB.open('test');
+      db.onerror = ()=>resolve(true);
+      db.onsuccess = ()=>{
+        // Method 2: storage quota (incognito usually has ~120MB cap)
+        if(navigator.storage && navigator.storage.estimate){
+          navigator.storage.estimate().then(({quota})=>{
+            resolve(quota < 120000000);
+          }).catch(()=>resolve(false));
+        } else {
+          resolve(false);
+        }
+      };
+    }catch(e){ resolve(false); }
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SPLIT-SCREEN / SMALL WINDOW DETECTION
+═══════════════════════════════════════════════════════════════ */
+const MIN_WIDTH_RATIO  = 0.75; // must be at least 75% of screen width
+const MIN_HEIGHT_RATIO = 0.70; // must be at least 70% of screen height
+
+function checkWindowSize(){
+  if(!quizActive && document.getElementById('quiz-screen').style.display !== 'block') return;
+  const wRatio = window.innerWidth  / screen.width;
+  const hRatio = window.innerHeight / screen.height;
+  const block  = document.getElementById('splitscreen-block');
+  if(wRatio < MIN_WIDTH_RATIO || hRatio < MIN_HEIGHT_RATIO){
+    block.classList.add('show');
+  } else {
+    block.classList.remove('show');
+  }
+}
+
+window.addEventListener('resize', checkWindowSize);
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT ON LOAD
+═══════════════════════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', async ()=>{
+  // Incognito check
+  const isIncognito = await detectIncognito();
+  if(isIncognito){
+    document.getElementById('incognito-block').classList.add('show');
+    return; // stop everything
+  }
+
+  // Render attempt history badge
+  renderAttemptBadge();
+});
+</script>
+</body>
+</html>
